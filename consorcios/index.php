@@ -1,51 +1,31 @@
-<?php
+<?php include 'includes/header.php'; ?>
 
-// Configurações do banco de dados
-$host = 'localhost';
-$user = 'root'; // usuário padrão do XAMPP
-$password = ''; // senha padrão do XAMPP (vazia)
-$database = 'login'; // substitua pelo nome do seu banco de dados
+<div class="hero">
+    <div class="hero-content">
+        <h1>Specter Homes</h1>
+        <p>Encontre a casa assombrada dos seus pesadelos!</p>
+        <a href="propriedades.php" class="btn">Ver Propriedades</a>
+    </div>
+</div>
 
-// Conectar ao banco de dados
-$conn = new mysqli($host, $user, $password, $database);
+<section class="about">
+    <h2>Sobre Nós</h2>
+    <p>A Specter Homes é a primeira imobiliária especializada em propriedades assombradas. Desde 1999, ajudamos fantasmas e mortais a encontrar o lar perfeito - cheio de mistérios e sustos!</p>
+</section>
 
-// Verificar conexão
-if ($conn->connect_error) {
-    die("Falha na conexão: " . $conn->connect_error);
-}
+<section class="features">
+    <div class="feature">
+        <h3>Assombração Garantida</h3>
+        <p>Todas as nossas propriedades são rigorosamente testadas para garantir atividade paranormal autêntica.</p>
+    </div>
+    <div class="feature">
+        <h3>Preços Assustadores</h3>
+        <p>Oferecemos os melhores preços para casas que vão fazer seu sangue gelar.</p>
+    </div>
+    <div class="feature">
+        <h3>Suporte 24/7</h3>
+        <p>Nossa equipe está sempre disponível, até mesmo à meia-noite, para atender suas necessidades sobrenaturais.</p>
+    </div>
+</section>
 
-// Criptografia de senha (apenas para exemplo/criação de usuários)
-// echo password_hash(123456, PASSWORD_DEFAULT);
-
-// Receber dados do forms
-$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
-// Acessar o IF quando o usuario clicar no botão de acesso do formulario
-if (!empty($dados["Sendlogin"])) {
-    // Preparar a consulta SQL
-    $query_usuario = "SELECT id, senha FROM usuarios WHERE usuario = ? LIMIT 1";
-    $stmt = $conn->prepare($query_usuario);
-    $stmt->bind_param("s", $dados["usuario"]);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-    
-    if ($resultado->num_rows == 1) {
-        // Usuário encontrado, verificar senha
-        $row_usuario = $resultado->fetch_assoc();
-        if (md5($dados["senha_usuario"], $row_usuario['senha'])) {
-            // Senha correta - iniciar sessão e redirecionar
-            session_start();
-            $_SESSION['id'] = $row_usuario['id'];
-            $_SESSION['usuario'] = $dados["usuario"];
-            
-            header("Location: dashboard.php"); // redireciona para página restrita
-            exit();
-        } else {
-            echo "<p style='color: red'>Erro: Senha incorreta!</p>";
-        }
-    } else {
-        echo "<p style='color: red'>Erro: Usuário não encontrado!</p>";
-    }
-}
-
-?>
+<?php include 'includes/footer.php'; ?>
